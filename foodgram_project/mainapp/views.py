@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from .models import Ingredient, Recipe
 from .forms import RecipeForm
 
-
+from django.contrib.auth.decorators import user_passes_test
 @user_passes_test(lambda u: u.is_superuser)
 def ingredients(request):
     import json
@@ -44,7 +44,7 @@ def add_recipe(request):
             form.instance.author = request.user
             form.save()
             return redirect('index')
-        return render(request, 'formRecipe.html', {'form':form})
+        return render(request, 'new_recipe.html', {'form':form})
     form = RecipeForm()
     return render(request, 'formRecipe.html', {'form':form})
 
