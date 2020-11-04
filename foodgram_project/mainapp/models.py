@@ -39,7 +39,7 @@ class RecipeIngredient(models.Model):
     qty = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return 'Ингредиент: {} (для рецепта)'.format(self.ingredient)
+        return f'{self.ingredient} {self.qty} {self.ingredient.dimension}'
 
 
 

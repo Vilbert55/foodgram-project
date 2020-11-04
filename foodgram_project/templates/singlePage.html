@@ -67,9 +67,8 @@
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингридиенты:</h3>
                     <div class="single-card__items single-card__items_column">
-                    {{ingredients}}
-                    {% for ingredient in ingredients %}
-                        <p class=" single-card__section-item">{{ ingredient.title }} {{ingredients}}</p>
+                    {% for i in ingredients%}
+                        <p class=" single-card__section-item">{{ i }}</p>
                     {% endfor %}
                     </div>
                 </div>
@@ -91,16 +90,16 @@
             </ul>
         </div>
     </footer>
-<script src="./js/components/Purchases.js"></script>
-<script src="./js/components/Favorites.js"></script>
-<script src="./js/components/Subscribe.js"></script>
-<script src="./js/config/config.js"></script>
+<script src="{% static "js/components/Purchases.js" %}"></script>
+<script src="{% static "js/components/Favorites.js" %}"></script>
+<script src="{% static "js/components/Subscribe.js" %}"></script>
+<script src="{% static "js/config/config.js" %}"></script>
 
-<script src="./js/components/MainCards.js"></script>
-<script src="./js/components/SingleCard.js"></script>
-<script src="./js/components/Header.js"></script>
+<script src="{% static "js/components/MainCards.js" %}"></script>
+<script src="{% static "js/components/SingleCard.js" %}"></script>
+<script src="{% static "js/components/Header.js" %}"></script>
 
-<script src="./js/api/Api.js"></script>
-<script src="singlePage.js"></script>
+<script src="{% static "js/api/Api.js" %}"></script>
+<script src="{% static "singlePage.js" %}"></script>
 </body>
 </html>

@@ -57,8 +57,7 @@ def add_recipe(request):
 def recipe_view(request, username, recipe_id):
     author = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, pk=recipe_id, author=author)
+
     inrgedients = RecipeIngredient.objects.filter(recipe_id=recipe.pk)
-    for i in inrgedients:
-        WWWWWWWWWWW = 1
-        print('WWWWWWWWWWWWWWW', i.ingredient)
-    return render(request, 'singlePage.html', {'recipe':recipe, 'username':author, 'inrgedients':inrgedients})
+
+    return render(request, 'singlePage.html', {'recipe':recipe, 'username':author, 'ingredients':inrgedients})
