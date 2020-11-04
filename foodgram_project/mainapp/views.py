@@ -1,11 +1,16 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import get_user_model, decorators
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 
-from .models import Ingredient, Recipe
+from .models import Ingredient, Recipe, RecipeIngredient
 from .forms import RecipeForm
 
 from django.contrib.auth.decorators import user_passes_test
+
+
+User = get_user_model()
+
 @user_passes_test(lambda u: u.is_superuser)
 def ingredients(request):
     import json
@@ -49,3 +54,11 @@ def add_recipe(request):
     return render(request, 'formRecipe.html', {'form':form})
 
 
+def recipe_view(request, username, recipe_id):
+    author = get_object_or_404(User, username=username)
+    recipe = get_object_or_404(Recipe, pk=recipe_id, author=author)
+    inrgedients = RecipeIngredient.objects.filter(recipe_id=recipe.pk)
+    for i in inrgedients:
+        WWWWWWWWWWW = 1
+        print('WWWWWWWWWWWWWWW', i.ingredient)
+    return render(request, 'singlePage.html', {'recipe':recipe, 'username':author, 'inrgedients':inrgedients})

@@ -54,7 +54,7 @@
             <a href="#" class="link" target="_blank"><img src="{{ im.url }}" alt="Какой-то текст" class="card__image"></a>
             {% endthumbnail %}
             <div class="card__body">
-                <a class="card__title link" href="#" target="_blank">{{ recipe.title }}</a>
+                <a class="card__title link" href="{% url 'recipe' recipe.author.username recipe.id %}" target="_blank">{{ recipe.title }}</a>
                 <ul class="card__items">
                     {% if recipe.breakfest %}
                     <li class="card__item"><span class="badge badge_style_green">Завтрак</span></li>
@@ -107,16 +107,16 @@
             </ul>
         </div>
     </footer>
-  <script src="{% static "./js/components/MainCards.js" %}"></script>
+  <script src="{% static "js/components/MainCards.js" %}"></script>
 
-  <script src="{% static "./js/components/Purchases.js" %}"></script>
-  <script src="{% static "./js/components/Favorites.js" %}"></script>
+  <script src="{% static "js/components/Purchases.js" %}"></script>
+  <script src="{% static "js/components/Favorites.js" %}"></script>
 
-  <script src="{% static "./js/config/config.js" %}"></script>
-  <script src="{% static "./js/components/CardList.js" %}"></script>
-  <script src="{% static "./js/components/Header.js" %}"></script>
+  <script src="{% static "js/config/config.js" %}"></script>
+  <script src="{% static "js/components/CardList.js" %}"></script>
+  <script src="{% static "js/components/Header.js" %}"></script>
 
-  <script src="{% static "./js/api/Api.js" %}"></script>
-  <script src="{% static "./indexAuth.js" %}"></script>
+  <script src="{% static "js/api/Api.js" %}"></script>
+  <script src="{% static "indexAuth.js" %}"></script>
 </body>
 </html>

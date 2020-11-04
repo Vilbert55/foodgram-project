@@ -73,8 +73,8 @@
                 <div class="form__field-group">
                     <div class="form__field-group-ingredientes">
                         <div class="form__dropdown">
-                            {# <input type="text" id="nameIngredient" class="form__input"> #}
-                            {{ form.ingredients|addclass:"form__input" }}
+                            <input type="text" id="nameIngredient" class="form__input"> 
+                           {# {{ form.ingredients|addclass:"form__input" }} #}
                             <div class="form__dropdown-items"></div>
                         </div>
                         <input type="number" id="cantidad" class="form__input" min="0">
@@ -129,10 +129,10 @@
         </ul>
     </div>
 </footer>
-<script src="{% static "./js/config/config.js" %}"></script>
-<script src="{% static "./js/components/Header.js" %}"></script>
-<script src="{% static "./js/utils/debouncing.js" %}"></script>
-<script src="{% static "./js/api/Api.js" %}"></script>
+<script src="{% static "js/config/config.js" %}"></script>
+<script src="{% static "js/components/Header.js" %}"></script>
+<script src="{% static "js/utils/debouncing.js" %}"></script>
+<script src="{% static "js/api/Api.js" %}"></script>
 <script src="{% static "formRecipe.js" %}"></script>
 </body>
 </html>

@@ -23,8 +23,10 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     empty_value_display = '-empty-'
 
+
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'ingredient', 'qty', 'recipe')
     search_fields = ('ingredient',)
     empty_value_display = '-empty-'
+    
