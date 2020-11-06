@@ -17,7 +17,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases`, {
+    return fetch(`/api/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/purchases/${id}`, {
+    return fetch(`api/purchases/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(`api/ingredients?search=${text}`, {
+        return fetch(`/api/ingredients?search=${text}`, {
             headers: {
                 'Content-Type': 'application/json'
             }

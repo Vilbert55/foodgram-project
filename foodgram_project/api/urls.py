@@ -7,5 +7,6 @@ router = DefaultRouter()
 
 
 router.register(r'ingredients', IngredientListView)
+router.register(r'purchases', IngredientListView)
 
 urlpatterns = router.urls

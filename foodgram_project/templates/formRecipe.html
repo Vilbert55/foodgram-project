@@ -15,9 +15,9 @@
     <nav class="nav">
         <div class="nav__container container">
             <ul class="nav__items list">
-                <li class="nav__item"><a href="#" class="nav__link link">Рецепты</a></li>
+                <li class="nav__item"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Мои подписки</a></li>
-                <li class="nav__item"><a href="#" class="nav__link link">Создать рецепт</a></li>
+                <li class="nav__item"><a href="{% url 'add_recipe' %}" class="nav__link link">Создать рецепт</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter"></span></li>
 
@@ -74,7 +74,7 @@
                     <div class="form__field-group-ingredientes">
                         <div class="form__dropdown">
                             <input type="text" id="nameIngredient" class="form__input"> 
-                           {# {{ form.ingredients|addclass:"form__input" }} #}
+                            {# {{ form.ingredients|addclass:"form__input" }} #}                            
                             <div class="form__dropdown-items"></div>
                         </div>
                         <input type="number" id="cantidad" class="form__input" min="0">
@@ -85,6 +85,14 @@
                     </div>
                     <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
                     <span class="form__error"></span>
+                    {% if form.non_field_errors %}
+                    <div class="non-field-errors">
+                    {% for error in form.non_field_errors %}
+                    <p class="form-error">{{ error }}</p>
+                     {% endfor %}
+                      </div>
+                     {% endif %}
+                    </span>
                 </div>
             </div>
             <div class="form__group">

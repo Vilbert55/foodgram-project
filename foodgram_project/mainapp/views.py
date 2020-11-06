@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 
 from .models import Ingredient, Recipe, RecipeIngredient
 from .forms import RecipeForm
+from .utils import IngredientsValid
 
 from django.contrib.auth.decorators import user_passes_test
 
@@ -26,11 +27,12 @@ def ingredients(request):
     return HttpResponse('\n'.join(str(data)))
 
 def index(request):
-    if request.GET.get('filter') == 'breakfest':
+    food_time = request.GET.get('filter')
+    if food_time == 'breakfest':
         recipe_list = Recipe.objects.filter(breakfest=True).order_by('-pub_date')
-    elif request.GET.get('filter') == 'lunch':
+    elif food_time == 'lunch':
         recipe_list = Recipe.objects.filter(lunch=True).order_by('-pub_date')
-    elif request.GET.get('filter') == 'dinner':
+    elif food_time == 'dinner':
         recipe_list = Recipe.objects.filter(dinner=True).order_by('-pub_date')
     else:
         recipe_list = Recipe.objects.order_by('-pub_date').all()
@@ -39,17 +41,32 @@ def index(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     #if request.user.is_authenticated:
-    return render(request, 'indexAuth3.html', {'page': page, 'paginator': paginator})
+    return render(request, 'indexAuth3.html', {'page': page, 'paginator': paginator, 'food_time':food_time})
     #return render(request, 'indexNotAuth.html')
 
 def add_recipe(request):
+       
     if request.method == 'POST':
+        author = request.user    
+        ingredients = IngredientsValid(request)
         form = RecipeForm(request.POST or None, files=request.FILES or None, )
-        if form.is_valid():
-            form.instance.author = request.user
-            form.save()
+        if ingredients.errors():
+            errors = ingredients.errors()
+            form.add_error(None, errors)
+            
+        elif form.is_valid():
+            form.instance.author = author
+            recipe = form.save(commit=False)
+            recipe.save()
+            data = ingredients.items
+            l=2
+            for pk in data:
+                ingredient_obj = get_object_or_404(Ingredient, pk=pk)
+                ingredient_recipe = RecipeIngredient(ingredient=ingredient_obj, recipe=recipe, qty=data[pk])
+                ingredient_recipe.save()
+            form.save_m2m()
             return redirect('index')
-        return render(request, 'new_recipe.html', {'form':form})
+        return render(request, 'formRecipe.html', {'form':form})
     form = RecipeForm()
     return render(request, 'formRecipe.html', {'form':form})
 
@@ -61,3 +78,4 @@ def recipe_view(request, username, recipe_id):
     inrgedients = RecipeIngredient.objects.filter(recipe_id=recipe.pk)
 
     return render(request, 'singlePage.html', {'recipe':recipe, 'username':author, 'ingredients':inrgedients})
+
