@@ -29,15 +29,6 @@ def ingredients(request):
 
 def index(request):
     food_time = request.GET.get('filter')
-    
-    #if food_time == 'breakfest':
-        #recipe_list = Recipe.objects.filter(breakfest=True).order_by('-pub_date')
-    #elif food_time == 'lunch':
-        #recipe_list = Recipe.objects.filter(lunch=True).order_by('-pub_date')
-    #elif food_time == 'dinner':
-        #recipe_list = Recipe.objects.filter(dinner=True).order_by('-pub_date')
-    #else:
-        #recipe_list = Recipe.objects.order_by('-pub_date').all()
 
     food = {
         'breakfest': (True, False),
