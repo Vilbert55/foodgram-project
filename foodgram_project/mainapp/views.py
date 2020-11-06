@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 User = get_user_model()
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def ingredients(request):
     import json
@@ -28,15 +29,29 @@ def ingredients(request):
 
 def index(request):
     food_time = request.GET.get('filter')
-    if food_time == 'breakfest':
-        recipe_list = Recipe.objects.filter(breakfest=True).order_by('-pub_date')
-    elif food_time == 'lunch':
-        recipe_list = Recipe.objects.filter(lunch=True).order_by('-pub_date')
-    elif food_time == 'dinner':
-        recipe_list = Recipe.objects.filter(dinner=True).order_by('-pub_date')
-    else:
-        recipe_list = Recipe.objects.order_by('-pub_date').all()
     
+    #if food_time == 'breakfest':
+        #recipe_list = Recipe.objects.filter(breakfest=True).order_by('-pub_date')
+    #elif food_time == 'lunch':
+        #recipe_list = Recipe.objects.filter(lunch=True).order_by('-pub_date')
+    #elif food_time == 'dinner':
+        #recipe_list = Recipe.objects.filter(dinner=True).order_by('-pub_date')
+    #else:
+        #recipe_list = Recipe.objects.order_by('-pub_date').all()
+
+    food = {
+        'breakfest': (True, False),
+        'lunch': (True, False),
+        'dinner': (True, False)
+    }
+
+    if food_time in food:
+        food[food_time] = (True,)
+
+    recipe_list = Recipe.objects.filter(
+        breakfest__in=food['breakfest'],
+        lunch__in=food['lunch'],
+        dinner__in=food['dinner']).order_by('-pub_date').all()
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
