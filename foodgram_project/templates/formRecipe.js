@@ -36,6 +36,9 @@ function Ingredients() {
     const addIngredient = (e) => {
         if(nameIngredient.value && cantidad.value) {
             const data = getValue();
+            if (!Boolean(data.id)) {
+                return;
+            }
             const elem = document.createElement('div');
             elem.classList.add('form__field-item-ingredient');
             elem.id = `ing_${cur}`;

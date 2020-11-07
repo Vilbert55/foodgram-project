@@ -5,8 +5,7 @@ from .models import Ingredient
 class IngredientsValid():
     def __init__(self, request):
         self.data = dict(request.POST.items())
-        self.repeating_elements = []
-            
+        self.repeating_elements = []            
         self.items = {}        
 
         for key in self.data:
@@ -29,3 +28,21 @@ class IngredientsValid():
             return (f'В рецепте дублируются ингредиенты: {elements}')
         return False
 
+
+def food_time_filter(request, queryset):
+    food = {
+            'breakfest': (True, False),
+            'lunch': (True, False),
+            'dinner': (True, False)
+            }
+    food_time = request.GET.get('filter')
+
+    if food_time in food:
+        food[food_time] = (True,)
+
+    queryset_new = queryset.filter(
+        breakfest__in=food['breakfest'],
+        lunch__in=food['lunch'],
+        dinner__in=food['dinner'])
+
+    return queryset_new, food_time

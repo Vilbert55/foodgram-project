@@ -5,9 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from rest_framework import generics, filters, mixins, viewsets, serializers
 from rest_framework.utils import json
+from rest_framework.response import Response
 
-from mainapp.models import Recipe, Ingredient
-from .serializers import IngredientSerializer, RecipeSerializer
+from mainapp.models import Recipe, Ingredient, Purchase
+from .serializers import IngredientSerializer, PurchaseSerializer
 
 
 
@@ -24,16 +25,27 @@ class IngredientListView(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 
 
-class RecipeViewSet(viewsets.ModelViewSet): 
-    queryset = Recipe.objects.all() 
-    serializer_class = RecipeSerializer 
-        
-    #permission_classes = [AdminOrReadOnly,]
-    def perform_update(self, serializer):        
+
+
+
+class PurchaseViewSet(viewsets.ModelViewSet):
+    queryset = Purchase.objects.all()
+    serializer_class = PurchaseSerializer
+    #permission_classes = [IsOwnerOrAdminOrModeratorOrReadOnly, ]
+
+    #def get_queryset(self):
+        #queryset = self.queryset.filter(title_id=self.kwargs.get('title_id'))
+        #return queryset
+
+    def perform_create(self, serializer):
+        recipe_id = self.kwargs.get('title_id')
+        recipe = generics.get_object_or_404(Recipe, pk=recipe_id)
         user = self.request.user
-        recipe = 'хз пока как достать'
-        if Recipe.objects.filter(pk=recipe.pk, owners=user).exists(): 
-            raise serializers.ValidationError('Already purchase')
-        serializer.save(owners=user)
+        if Purchase.objects.filter(buyer=user, recipe=recipe).exists():
+            raise serializers.ValidationError('Already purcesed')
+        serializer.save(buyer=user, recipe=recipe)
+        return Response({'success': True})
+        
+        
 
 

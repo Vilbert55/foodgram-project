@@ -1,4 +1,3 @@
-
 class Api {
     constructor(apiUrl) {
         this.apiUrl =  apiUrl;
@@ -17,7 +16,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/api/purchases/`, {
+    return fetch(`/api/${id}/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -34,7 +33,7 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`api/purchases/`, {
+    return fetch(`api/${id}/purchases/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -79,7 +78,7 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/favorites`, {
+    return fetch(`/favorites/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

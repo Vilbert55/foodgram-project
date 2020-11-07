@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from mainapp.models import Ingredient, Recipe
+from mainapp.models import Ingredient, Recipe, Purchase
 
 
 User = get_user_model()
@@ -13,9 +13,10 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
 
 
-class RecipeSerializer(serializers.ModelSerializer):
-    owners = serializers.SlugRelatedField(slug_field='slug', queryset=User.objects.all(), many=True)
+class PurchaseSerializer(serializers.ModelSerializer):
+    buyer = serializers.StringRelatedField()
+    recipe = serializers.StringRelatedField()
     class Meta:
-        fields = ('owners',)
-        model = Recipe
+        fields = '__all__'
+        model = Purchase
     

@@ -20,7 +20,7 @@ class Recipe(models.Model):
     title = models.CharField(max_length=50, db_index=True)
     description = models.TextField(max_length=1000)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipes_author')
-    owners = models.ManyToManyField(User, related_name='recipes_owner', blank=True)
+    
     ingredients = models.ManyToManyField(Ingredient, related_name='recipes_ingredient', through='RecipeIngredient')
     image = models.ImageField(upload_to='mainapp/', blank=True, null=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)    
@@ -41,3 +41,17 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return f'{self.ingredient} {self.qty} {self.ingredient.dimension}'
 
+
+class Purchase(models.Model):
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='purchases')
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='favorites')
+
+
+class Follow(models.Model):
+    consumer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='consumer')
+    cook = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cook')
