@@ -26,8 +26,9 @@ SECRET_KEY = '_ytn_qn2jn&=xmx*anvnp@i2h-e#j-rns(hdqpmx!s$auqs&13'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+SITE_ID = 1
 
 # Application definition
 
@@ -38,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'mainapp',
     'api',
     'users',
     'sorl.thumbnail',
     'rest_framework',
-    'django_filters',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -130,27 +133,31 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#STATICFILES_DIRS = [
-    #os.path.join(BASE_DIR, 'static_in_dev')
-#]
+# STATICFILES_DIRS = [
+#os.path.join(BASE_DIR, 'static_in_dev')
+# ]
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
-        'AUTHENTICATION_BACKENDS':[
-            'django.contrib.auth.backends.RemoteUserBackend'
-        ],
-    
-        'DEFAULT_FILTER_BACKENDS': [
-            'django_filters.rest_framework.DjangoFilterBackend'
-        ],
-#        'DEFAULT_PERMISSION_CLASSES': [
-#            'rest_framework.permissions.IsAuthenticated', 
-#        ],
-    }
+    'AUTHENTICATION_BACKENDS': [
+        'django.contrib.auth.backends.RemoteUserBackend'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')

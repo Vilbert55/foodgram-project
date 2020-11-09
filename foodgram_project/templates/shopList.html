@@ -4,6 +4,11 @@
 {% block static %}
     <link rel="stylesheet" href="{% static "pages/shopList.css" %}">
 {% endblock %}
+
+{% block nav %}
+    {% include "nav.html" with purchases=True %}
+{% endblock %}
+
 {% block content %}
     <div class="main__header">
         <h1 class="main__title">Список покупок</h1>
@@ -15,16 +20,16 @@
             <li class="shopping-list__item" data-id="{{ recipe.pk }}">
                 <div class="recipe recipe_reverse">
                     {% thumbnail recipe.image "250x250" crop="center" upscale=True as im %}
-                    <img src="{{ im.url }}" alt="какой-то текст" class="recipe__image recipe__image_big">
+                    <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link"><img src="{{ im.url }}" alt="какой-то текст" class="recipe__image recipe__image_big">
                     {% endthumbnail %}
-                    <h3 class="recipe__title">{{ recipe.title }}</h3>
+                    <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link"><h3 class="recipe__title">{{ recipe.title }}</h3>
                     <p class="recipe__text"><span class="icon-time"></span>{{ recipe.cooking_time }} мин.</p>
                 </div>
                 <a href="#" class="shopping-list__button link">Удалить</a>
             </li>
         {% endfor %}          
         </ul>
-        <a href="#"><button class="button button_style_blue">Скачать список</button></a>
+        <a href="{% url "getproducts" %}"><button class="button button_style_blue">Скачать список</button></a>
     </div>
 
 <script src="{% static "js/config/config.js" %}"></script>

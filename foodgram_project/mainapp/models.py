@@ -14,16 +14,19 @@ class Ingredient(models.Model):
         return self.title
 
 
-
 class Recipe(models.Model):
 
     title = models.CharField(max_length=50, db_index=True)
     description = models.TextField(max_length=1000)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipes_author')
-    
-    ingredients = models.ManyToManyField(Ingredient, related_name='recipes_ingredient', through='RecipeIngredient')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='recipes_author')
+
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        related_name='recipes_ingredient',
+        through='RecipeIngredient')
     image = models.ImageField(upload_to='mainapp/', blank=True, null=True)
-    pub_date = models.DateTimeField('date published', auto_now_add=True)    
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     cooking_time = models.PositiveIntegerField(default=1)
 
     breakfest = models.BooleanField(default=False, verbose_name='Завтрак')
@@ -33,9 +36,15 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
-class RecipeIngredient(models.Model):    
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipes')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    class Meta:
+        ordering = ['-pub_date']
+
+
+class RecipeIngredient(models.Model):
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name='recipes')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
     qty = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -43,15 +52,30 @@ class RecipeIngredient(models.Model):
 
 
 class Purchase(models.Model):
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='purchases')
+    buyer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='purchases')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='purchases')
+
+    class Meta:
+        unique_together = ['buyer', 'recipe']
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='favorites')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='favorites')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='favorites')
+
+    class Meta:
+        unique_together = ['user', 'recipe']
 
 
 class Follow(models.Model):
-    consumer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='consumer')
-    cook = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cook')
+    consumer = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='consumer')
+    cook = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='cook')
+
+    class Meta:
+        unique_together = ['consumer', 'cook']

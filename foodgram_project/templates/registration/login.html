@@ -1,31 +1,15 @@
-<!doctype html>
+{% extends "base.html" %}
 {% load static %}
 {% load user_filters %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Войти на сайт</title>
-    <link rel="stylesheet" href={% static "pages/form.css" %}>
-</head>
-<body class="body">
-<header class="header">
-    <nav class="nav">
-        <div class="nav__container container">
-            <ul class="nav__items list">
-                <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок</a></li>
-            </ul>
-            <ul class="nav__items list">
-                <li class="nav__item"><a href="#" class="nav__link link">Войти</a></li>
-                <li class="nav__item"><a href="#" class="button button_style_blue">Создать аккаунт</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
-<main class="main container">
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock %}
+{% block title %}Войти на сайт{% endblock %}
+{% block nav %}
+    {% include "nav.html"%}
+{% endblock %}
+{% block content %}
+
     <div class="main__header">
         <h1 class="main__title">Войти на сайт</h1>
     </div>
@@ -34,8 +18,7 @@
             {% csrf_token %}
             <div class="form__group">
                 <label for="{{ form.username.id_for_label }}" class="form__label">Имя</label>
-                <div class="form__field-group">
-                    {#<input type="text" name="username" id="id_username" class="form__input">#}
+                <div class="form__field-group">                    
                     {{ form.username|addclass:"form__input" }}
                     <span class="form__error"></span>
                 </div>
@@ -43,12 +26,10 @@
             <div class="form__group">
                 <label for="{{ form.password.id_for_label }}" class="form__label">Пароль</label>
                 <div class="form__field-group">
-                    {#<input type="password" name="password" id="id_password" class="form__input">#}
+                    
                     {{ form.password|addclass:"form__input" }}
-                    {% if form.errors %}
-                        
-                            <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.</span>
-                        
+                    {% if form.errors %}                        
+                            <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.</span>                        
                     {% endif %}
                 </div>
                 
@@ -59,17 +40,5 @@
             </div>
         </form>
     </div>
-
-
-</main>
-<footer class="footer">
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
-</body>
-</html>
+    
+{% endblock %}
