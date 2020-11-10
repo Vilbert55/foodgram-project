@@ -1,4 +1,3 @@
-flake8 --exclude=./venv,.foodgram_project/users/migrations,./foodgram_project/mainapp/migrations,./foodgram_project/api/migrations,./foodgram_project/manage.py,./foodgram_project/foodgram_project/settings.py .
 name: foodgram
 
 on: [push]
