@@ -42,7 +42,7 @@ def get_recipes(cook):
 @register.filter(name='get_count_recipes')
 def get_count_recipes(cook):
     count = cook.recipes_author.count() - 3
-    if count < 4:
+    if count < 1:
         return False
 
     if count % 10 == 1 and count % 100 != 11:
