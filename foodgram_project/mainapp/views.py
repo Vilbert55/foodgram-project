@@ -1,16 +1,14 @@
 import json
-
 from django.contrib.auth import get_user_model, decorators
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.db.models import Sum
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import Ingredient, Recipe, RecipeIngredient, Follow
 from .forms import RecipeForm
 from .utils import IngredientsValid, food_time_filter
-
-from django.contrib.auth.decorators import user_passes_test
 
 
 User = get_user_model()
@@ -26,7 +24,7 @@ def ingredients(request):
         dimension = i['dimension']
         title = i['title']
 
-        if not Ingredient.objects.filter(title=title).exist():
+        if not Ingredient.objects.filter(title=title).exists():
             if dimension in ['по вкусу', 'стакан', 'кусок',
                              'горсть', 'банка', 'тушка', 'пакет']:
                 dimension = 'г'
@@ -179,8 +177,9 @@ def recipe_edit(request, username, recipe_id):
                     ingredient=ingredient_obj, recipe=recipe_obj, qty=data[pk])
                 ingredient_recipe.save()
             form.save_m2m()
+            del ingredients
             return redirect('index')
-
+        del ingredients
         return render(request, 'formChangeRecipe.html', {
             'form': form,
             'recipe_obj': recipe_obj,

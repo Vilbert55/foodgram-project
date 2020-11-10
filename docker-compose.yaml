@@ -3,6 +3,7 @@ version: '3.3'
 volumes:
   postgres_data:
   static-data:
+  media-data:
 
 services:
   db:
@@ -18,10 +19,11 @@ services:
     expose:
       - 8000
     volumes:
-      - static-data:/foodgram_project/static/
+      - static-data:/code/foodgram_project/static/
+      - media-data:/code/foodgram_project/media/
     depends_on:
       - db
-    command: bash -c "cd foodgram_project && python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn foodgram_project.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "cd foodgram_project && python manage.py collectstatic --noinput && python manage.py makemigrations --noinput && python manage.py migrate --noinput && gunicorn foodgram_project.wsgi:application --bind 0.0.0.0:8000"
     env_file:
       - ./.env
 
@@ -36,5 +38,6 @@ services:
     volumes:
       - ./docker.conf:/etc/nginx/conf.d/docker.conf
       - static-data:/static/
+      - media-data:/media/
     depends_on:
       - web       
