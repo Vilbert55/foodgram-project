@@ -29,9 +29,8 @@
             <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link">
                 <div class="recipe">
                     {% thumbnail recipe.image "250x250" crop="center" upscale=True as im %}
-                        <img src="{{ im.url }}" alt="какой-то-текст" class="recipe__image">
-                    {% endthumbnail %}
-                    
+                        <img src="{{ im.url }}" alt="Автор рецепта не добавил фото" class="recipe__image">
+                    {% endthumbnail %}                    
                     <h3 class="recipe__title">{{recipe.title}}</h3>
                     <p class="recipe__text"><span class="icon-time"></span> {{recipe.cooking_time}} мин.</p>
                 </div>

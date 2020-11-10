@@ -12,8 +12,11 @@
     {% include "nav.html"%}
 {% endblock %}
 {% block content %}
+{% load thumbnail %}
         <div class="single-card" data-id="{{ recipe.pk }}" data-author="{{ recipe.author.pk }}">
-            <img src="{% if recipe.image %}{{ recipe.image.url }}{% endif %}" alt="Автор рецепта не добавил фото" class="single-card__image">
+            {% thumbnail recipe.image "250x250" crop="center" upscale=True as im %}
+            <img src="{{ im.url }}" alt="Автор рецепта не добавил фото" class="single-card__image">
+            {% endthumbnail %}
             <div class="single-card__info">
                 <div class="single-card__header-info">
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
@@ -59,10 +62,12 @@
                     {% else %}
                         <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% endif %}
-                    {% if recipe.author|is_follow:user %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></li>
-                    {% else %}                 
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                    {% if recipe.author != user %}
+                        {% if recipe.author|is_follow:user %}
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></li>
+                        {% else %}                 
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                        {% endif %}
                     {% endif %}
                 {% else %}                
                         <li class="single-card__item"><a href="{% url 'login' %}"><button class="button button_style_blue"><span class="icon-plus"></span> Добавить в покупки</button></li>
