@@ -14,8 +14,8 @@
     {% include "tags.html" with url=request.path food_time=food_time%}
 </div>
 <div class="author-subscribe" data-author="{{ author.pk }}">
-    <p class="card__text">Публикаций: {{ recipe_count }}</p>
-    <p class="card__text">Подписчиков: {{ followers_count }}</p>
+    <p class="card__text">публикаций: {{ recipe_count }}</p>
+    <p class="card__text">подписчиков: {{ followers_count }}</p>
     <p></p>
 {% if user.is_authenticated and not user == author%}    
     {% if author|is_follow:user %}

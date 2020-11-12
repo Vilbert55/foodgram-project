@@ -7,13 +7,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 
-
 from mainapp.models import Recipe, Ingredient, Purchase, Follow, Favorite
-from .serializers import (
-    IngredientSerializer,
-    PurchaseSerializer,
-    FavoriteSerializer,
-    FollowSerializer)
+from .serializers import (IngredientSerializer, PurchaseSerializer,
+                          FavoriteSerializer, FollowSerializer)
 
 
 User = get_user_model()
