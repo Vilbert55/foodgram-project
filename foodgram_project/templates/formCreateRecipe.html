@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load user_filters %}
-{% block title %}Создание рецепта{% endblock %}
+{% block title %} Создание рецепта {% endblock %}
 {% block static %}
     <link rel="stylesheet" href="{% static "/pages/form.css" %}">
 {% endblock %}
@@ -10,7 +10,7 @@
 {% endblock %}
 {% block content %}
     <div class="main__header">
-        <h1 class="main__title">Создание рецепта</h1>
+        <h1 class="main__title"> Создание рецепта </h1>
     </div>
     <div class="form-container">
         {% include "form_recipe.html"%}

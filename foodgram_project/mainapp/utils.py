@@ -3,10 +3,12 @@ from .models import Ingredient
 
 
 def valid(value):
-    if type(value) is str:
-        if value.isdigit():
-            return int(value)
-    return 1
+    try:
+        return int(value)
+    except TypeError:
+        return 1
+    except ValueError:
+        return 1
 
 
 class IngredientsValid:
@@ -36,7 +38,7 @@ class IngredientsValid:
             return 'Вы не добавили ни одного ингредиента'
         if self.repeating_elements:
             elements = ', '.join(self.repeating_elements)
-            return (f'В рецепте дублируются ингредиенты: {elements}')
+            return f'В рецепте дублируются ингредиенты: {elements}'
         return False
 
 

@@ -24,7 +24,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/api/purchases/${id}`, {
+    return fetch(`/api/v1/${id}/purchases/`, {
       method: 'POST',
       headers: {        
         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/api/purchases/${id}`, {
+    return fetch(`/api/v1/${id}/purchases/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(`/api/subscriptions/${id}`, {
+    return fetch(`/api/v1/${id}/subscriptions/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ class Api {
       })
   }
   removeSubscriptions (id) {
-    return fetch(`/api/subscriptions/${id}`, {
+    return fetch(`/api/v1/${id}/subscriptions/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/api/favorites/${id}`, {
+    return fetch(`/api/v1/${id}/favorites/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ class Api {
         })
   }
   removeFavorites (id) {
-    return fetch(`/api/favorites/${id}`, {
+    return fetch(`/api/v1/${id}/favorites/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(`/api/ingredients?search=${text}`, {
+        return fetch(`/api/v1/ingredients?search=${text}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': this.getToken()

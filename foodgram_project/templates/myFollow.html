@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Мои подписки{% endblock %}
+{% block title %} Мои подписки {% endblock %}
 {% load static %}
 {% load user_filters %}
 {% block static %}
@@ -11,40 +11,43 @@
 {% block content %}
 
 <div class="main__header">
-    <h1 class="main__title">Мои подписки: {{cooks_count}}</h1>
+    <h1 class="main__title"> Мои подписки: {{ cooks_count }}</h1>
 </div>
 <div class="card-list">
+{% csrf_token %}
 {% load thumbnail %}
 {% for cook in page %}
-    <div class="card-user" data-author="{{cook.pk}}">
+    <div class="card-user" data-author="{{ cook.pk }}">
     <div class="card-user__header">
     <a href="{% url 'profile' cook.username %}" class="link">
-        <h2 class="card-user__title">{{cook.username}}</h2>
+        <h2 class="card-user__title">{{ cook.username }}</h2>
+    </a>
     </div>
     <div class="card-user__body">
         <ul class="card-user__items">
         
         {% for recipe in cook|get_recipes %}
             <li class="card-user__item">
-            <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link">
+            
                 <div class="recipe">
                     {% thumbnail recipe.image "250x250" crop="center" upscale=True as im %}
-                        <img src="{{ im.url }}" alt="Автор рецепта не добавил фото" class="recipe__image">
+                        <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link"><img src="{{ im.url }}" alt="Автор рецепта не добавил фото" class="recipe__image"></a>
                     {% endthumbnail %}                    
-                    <h3 class="recipe__title">{{recipe.title}}</h3>
-                    <p class="recipe__text"><span class="icon-time"></span> {{recipe.cooking_time}} мин.</p>
+                    <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link"><h3 class="recipe__title">{{ recipe.title }}</h3></a>
+                    <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                 </div>
+            
             </li>
         {% endfor %}
         {% if cook|get_count_recipes%}
             <li class="card-user__item">
-                <a href="{% url 'profile' cook.username %}" class="card-user__link link">{{cook|get_count_recipes}}</a>
+                <a href="{% url 'profile' cook.username %}" class="card-user__link link">{{ cook|get_count_recipes }}</a>
             </li>
         {% endif %}        
         </ul>
     </div>
     <div class="card-user__footer">    
-        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>    
+        <button class="button button_style_light-blue button_size_auto" name="subscribe"> Отписаться </button>    
     </div>
     </div>
 

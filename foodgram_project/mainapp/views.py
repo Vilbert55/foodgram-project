@@ -1,10 +1,8 @@
-import json
 from django.contrib.auth import get_user_model, decorators
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.db.models import Sum
-from django.contrib.auth.decorators import user_passes_test
 
 from .models import Ingredient, Recipe, RecipeIngredient, Follow
 from .forms import RecipeForm
@@ -14,32 +12,12 @@ from .utils import IngredientsValid, food_time_filter
 User = get_user_model()
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def ingredients(request):
-
-    with open('ingredients.json', 'r', encoding='utf-8') as fh:
-        data = json.load(fh)
-
-    for i in data:
-        dimension = i['dimension']
-        title = i['title']
-
-        if not Ingredient.objects.filter(title=title).exists():
-            if dimension in ['по вкусу', 'стакан', 'кусок',
-                             'горсть', 'банка', 'тушка', 'пакет']:
-                dimension = 'г'
-            ingredient = Ingredient(title=title, dimension=dimension)
-            ingredient.save()
-
-    return HttpResponse('Добавлены ингредиенты\n'.join(str(data)))
-
-
 def index(request):
 
     recipes = Recipe.objects.select_related('author').all()
-    recipe_list, food_time = food_time_filter(request, recipes)
+    recipes, food_time = food_time_filter(request, recipes)
 
-    paginator = Paginator(recipe_list, 6)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
@@ -53,12 +31,12 @@ def profile(request, username):
 
     author = get_object_or_404(User, username=username)
     recipes = Recipe.objects.select_related(
-        'author').filter(author_id=author.pk).all()
-    recipe_list, food_time = food_time_filter(request, recipes)
-    recipe_count = recipe_list.count
-    followers_count = Follow.objects.filter(cook=author).count
+        'author').filter(author_id=author.pk)
+    recipes, food_time = food_time_filter(request, recipes)
+    recipe_count = recipes.count
+    followers_count = Follow.objects.filter(cook=author).count()
 
-    paginator = Paginator(recipe_list, 6)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
@@ -82,9 +60,9 @@ def purchases_list(request):
 def favorite_list(request):
     favorite_recipes = Recipe.objects.select_related(
         'author').filter(favorites__user__pk=request.user.id)
-    recipe_list, food_time = food_time_filter(request, favorite_recipes)
+    recipes, food_time = food_time_filter(request, favorite_recipes)
 
-    paginator = Paginator(recipe_list, 6)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
@@ -109,83 +87,69 @@ def follow_list(request):
 
 
 def recipe_view(request, username, recipe_id):
-    author = get_object_or_404(User, username=username)
-    recipe = get_object_or_404(Recipe, pk=recipe_id, author=author)
+    recipe = get_object_or_404(Recipe, pk=recipe_id, author__username=username)
     inrgedients = RecipeIngredient.objects.filter(recipe_id=recipe.pk)
     return render(request, 'singlePage.html', {
         'recipe': recipe,
-        'username': author,
+        'username': username,
         'ingredients': inrgedients})
 
 
 @decorators.login_required
 def add_recipe(request):
+    form = RecipeForm(request.POST or None, files=request.FILES or None)
 
     if request.method == 'POST':
-        author = request.user
         ingredients = IngredientsValid(request)
-        form = RecipeForm(request.POST or None, files=request.FILES or None, )
         if ingredients.errors():
-            errors = ingredients.errors()
-            form.add_error(None, errors)
+            form.add_error(None, ingredients.errors())
 
-        if form.is_valid():
-            form.instance.author = author
-            recipe = form.save(commit=False)
-            recipe.save()
-            data = ingredients.items
-            for pk in data:
-                ingredient_obj = get_object_or_404(Ingredient, pk=pk)
-                ingredient_recipe = RecipeIngredient(
-                    ingredient=ingredient_obj, recipe=recipe, qty=data[pk])
-                ingredient_recipe.save()
-            form.save_m2m()
-            del ingredients
-            return redirect('index')
-        del ingredients
-        return render(request, 'formCreateRecipe.html', {'form': form})
-    form = RecipeForm()
+    if form.is_valid():
+        form.instance.author = request.user
+        recipe = form.save(commit=False)
+        recipe.save()
+        data = ingredients.items
+        for pk in data:
+            ingredient_obj = get_object_or_404(Ingredient, pk=pk)
+            ingredient_recipe = RecipeIngredient(
+                ingredient=ingredient_obj, recipe=recipe, qty=data[pk])
+            ingredient_recipe.save()
+        form.save_m2m()
+        return redirect('index')
+
     return render(request, 'formCreateRecipe.html', {'form': form})
 
 
 @decorators.login_required
 def recipe_edit(request, username, recipe_id):
-    user = get_object_or_404(User, username=username)
-    recipe_obj = get_object_or_404(Recipe, pk=recipe_id)
+    recipe_obj = get_object_or_404(
+        Recipe, pk=recipe_id, author__username=username)
     ingredients_objs = RecipeIngredient.objects.filter(recipe=recipe_obj)
-    author = recipe_obj.author
 
-    if author != request.user != user and not request.user.is_superuser:
+    if request.user != recipe_obj.author and not request.user.is_superuser:
         return redirect('recipe', username=username, recipe_id=recipe_id)
+
+    form = RecipeForm(request.POST or None,
+                      files=request.FILES or None, instance=recipe_obj)
 
     if request.method == 'POST':
         ingredients = IngredientsValid(request)
-        form = RecipeForm(request.POST or None,
-                          files=request.FILES or None, instance=recipe_obj)
         if ingredients.errors():
-            errors = ingredients.errors()
-            form.add_error(None, errors)
+            form.add_error(None, ingredients.errors())
 
-        elif form.is_valid():
-            recipe_obj = form.save(commit=False)
-            recipe_obj.save()
-            RecipeIngredient.objects.filter(recipe=recipe_obj).delete()
-            data = ingredients.items
-            for pk in data:
-                ingredient_obj = get_object_or_404(Ingredient, pk=pk)
-                ingredient_recipe = RecipeIngredient(
-                    ingredient=ingredient_obj, recipe=recipe_obj, qty=data[pk])
-                ingredient_recipe.save()
-            form.save_m2m()
-            del ingredients
-            return redirect('index')
-        del ingredients
-        return render(request, 'formChangeRecipe.html', {
-            'form': form,
-            'recipe_obj': recipe_obj,
-            'ingredients_objs': ingredients_objs})
+    if form.is_valid():
+        recipe_obj = form.save(commit=False)
+        recipe_obj.save()
+        RecipeIngredient.objects.filter(recipe=recipe_obj).delete()
+        data = ingredients.items
+        for pk in data:
+            ingredient_obj = get_object_or_404(Ingredient, pk=pk)
+            ingredient_recipe = RecipeIngredient(
+                ingredient=ingredient_obj, recipe=recipe_obj, qty=data[pk])
+            ingredient_recipe.save()
+        form.save_m2m()
+        return redirect('index')
 
-    form = RecipeForm(instance=recipe_obj)
     return render(request, 'formChangeRecipe.html', {
         'form': form,
         'recipe_obj': recipe_obj,
@@ -194,12 +158,11 @@ def recipe_edit(request, username, recipe_id):
 
 @decorators.login_required
 def recipe_delete(request, username, recipe_id):
-    recipe_obj = get_object_or_404(Recipe, pk=recipe_id)
-    user = request.user
+    recipe_obj = get_object_or_404(
+        Recipe, author__username=username, pk=recipe_id)
 
     if request.method == 'POST':
-        author = get_object_or_404(User, username=username)
-        if recipe_obj.author == user == author or user.is_superuser:
+        if recipe_obj.author == request.user or request.user.is_superuser:
             recipe_obj.delete()
         return redirect('index')
     else:
@@ -209,22 +172,10 @@ def recipe_delete(request, username, recipe_id):
             'recipe_obj': recipe_obj})
 
 
-def page_not_found(request, exception):
-    return render(
-        request,
-        'misc/404.html',
-        {'path': request.path},
-        status=404)
-
-
-def server_error(request):
-    return render(request, "misc/500.html", status=500)
-
-
 @decorators.login_required
 def txt_upload(request):
-    recipe_list = Recipe.objects.filter(purchases__buyer=request.user)
-    ingredients = recipe_list.values(
+    recipes = Recipe.objects.filter(purchases__buyer=request.user)
+    ingredients = recipes.values(
         'ingredients__title', 'ingredients__dimension'
     ).annotate(
         total_qty=Sum('recipe_ingredients__qty')

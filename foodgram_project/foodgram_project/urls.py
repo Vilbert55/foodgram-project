@@ -40,8 +40,8 @@ urlpatterns += [
 
 ]
 
-handler404 = "mainapp.views.page_not_found"  # noqa
-handler500 = "mainapp.views.server_error"   # noqa
+handler404 = "foodgram_project.views.page_not_found"  # noqa
+handler500 = "foodgram_project.views.server_error"   # noqa
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

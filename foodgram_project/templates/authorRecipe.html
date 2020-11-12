@@ -13,10 +13,9 @@
     <h1 class="main__title">{{ author.username }}</h1>
     {% include "tags.html" with url=request.path food_time=food_time%}
 </div>
-<!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
 <div class="author-subscribe" data-author="{{ author.pk }}">
-    <p class="card__text">Публикаций: {{recipe_count}}</p>
-    <p class="card__text">Подписчиков: {{followers_count}}</p>
+    <p class="card__text">Публикаций: {{ recipe_count }}</p>
+    <p class="card__text">Подписчиков: {{ followers_count }}</p>
     <p></p>
 {% if user.is_authenticated and not user == author%}    
     {% if author|is_follow:user %}

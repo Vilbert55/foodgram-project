@@ -8,12 +8,13 @@ from .views import (IngredientListView, api_purchase_detail,
 router = DefaultRouter()
 
 
-router.register(r'ingredients', IngredientListView)
+router.register(r'v1/ingredients', IngredientListView)
+
 
 urlpatterns = [
-    path('purchases/<recipe_id>', api_purchase_detail),
-    path('favorites/<recipe_id>', api_favorite_detail),
-    path('subscriptions/<cook_id>', api_follow_detail),
+    path('v1/<int:recipe_id>/purchases/', api_purchase_detail),
+    path('v1/<int:recipe_id>/favorites/', api_favorite_detail),
+    path('v1/<int:cook_id>/subscriptions/', api_follow_detail),
 ]
 
 urlpatterns += router.urls
