@@ -32,12 +32,11 @@ services:
     image: nginx:1.18.0
     ports:
       - "80:80"
-    environment:
-      - NGINX_HOST=127.0.0.1
-      - NGINX_PORT=80
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/docker.conf
       - static-data:/static/
       - media-data:/media/
     depends_on:
       - web
+    env_file:
+      - ./.env
