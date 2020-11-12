@@ -44,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: vilbert55/foodgram:1.0
+          tags: vilbert55/foodgram:v1
 
   deploy:
     runs-on: ubuntu-latest

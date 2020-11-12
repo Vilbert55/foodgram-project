@@ -14,7 +14,7 @@ services:
       - ./.env
 
   web:
-    image: vilbert55/foodgram:1.0
+    image: vilbert55/foodgram:v1
     restart: always
     expose:
       - 8000
