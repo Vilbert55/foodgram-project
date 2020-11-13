@@ -33,7 +33,7 @@ def profile(request, username):
     recipes = Recipe.objects.select_related(
         'author').filter(author_id=author.pk)
     recipes, food_time = food_time_filter(request, recipes)
-    recipe_count = recipes.count
+    recipe_count = recipes.count()
     followers_count = Follow.objects.filter(cook=author).count()
 
     paginator = Paginator(recipes, 6)

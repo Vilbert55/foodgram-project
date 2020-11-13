@@ -5,9 +5,7 @@ from .models import Ingredient
 def valid(value):
     try:
         return int(value)
-    except TypeError:
-        return 1
-    except ValueError:
+    except (TypeError, ValueError) as e: # noqa
         return 1
 
 

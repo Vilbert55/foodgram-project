@@ -23,7 +23,7 @@ class Recipe(models.Model):
 
     ingredients = models.ManyToManyField(
         Ingredient,
-        related_name='recipes_ingredient',
+        related_name='recipes',
         through='RecipeIngredient')
     image = models.ImageField(upload_to='mainapp/', blank=True, null=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
@@ -42,7 +42,9 @@ class Recipe(models.Model):
 
 class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name='recipes')
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name='recipe_ingredients')
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, related_name='recipe')
     qty = models.PositiveIntegerField(default=1)
