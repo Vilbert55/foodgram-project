@@ -1,6 +1,5 @@
-![foodgram](https://github.com/Vilbert55/foodgram/workflows/foodgram/badge.svg)
+![foodgram](https://github.com/Vilbert55/foodgram-project/workflows/foodgram/badge.svg)
 # foodgram-project
-foodgram-project
 
 Демо: [http://quickcookies.cf/](http://quickcookies.cf// "Продуктовый помощник")
 
@@ -10,9 +9,9 @@ foodgram-project
 
 ## Установка и запуск
 
-Для работы требуется Docker и Docker-compose 
+Для работы требуется **Docker** и **Docker-compose**
 
-Сохраните файлы docker-compose.yaml и nginx.conf
+Сохраните файлы **docker-compose.yaml** и **nginx.conf**
 
 В этой же диретории создайте файл .env со следующим содержимым
 ```
@@ -26,7 +25,7 @@ SECRET_KEY= (придумайте свой)
 NGINX_HOST=127.0.0.1 
 NGINX_PORT=80  
 ```
-Замените значения server_name в nginx.conf на 127.0.0.1 localhost
+Замените значения *server_name* в **nginx.conf** на *127.0.0.1 localhost*
 
 Спульте образы и запустите контейнеры командой
 ```
