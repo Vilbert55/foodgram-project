@@ -25,7 +25,7 @@ SECRET_KEY= (придумайте свой)
 NGINX_HOST=127.0.0.1 
 NGINX_PORT=80  
 ```
-Замените значения *server_name* в **nginx.conf** на *127.0.0.1 localhost*
+Замените значения *server_name* в файле **nginx.conf** на *127.0.0.1 localhost*
 
 Спульте образы и запустите контейнеры командой
 ```
@@ -44,4 +44,4 @@ python manage.py loadingredients
 python manage.py createsuperuser
 ```
 
-Приложение доступно по адресу localhost:80
+Приложение доступно по адресу *localhost:80*
