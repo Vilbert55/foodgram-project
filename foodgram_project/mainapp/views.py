@@ -178,7 +178,7 @@ def txt_upload(request):
     ingredients = recipes.values(
         'ingredients__title', 'ingredients__dimension'
     ).annotate(
-        total_qty=Sum('recipe_ingredients__qty')
+        total_qty=Sum('recipe__qty')
     )
     file_data = ''
 
