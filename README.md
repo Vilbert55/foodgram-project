@@ -44,4 +44,4 @@ python manage.py loadingredients
 python manage.py createsuperuser
 ```
 
-Приложение доступно по адресу *localhost:80*
+Приложение доступно по адресу: *localhost:80*
